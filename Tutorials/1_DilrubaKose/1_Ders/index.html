@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ders 1: Mikroservis Mimarisine Giriş & Mimari Analiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Mikroservis Eğitimi • Ders 1
+            </div>
+            <h1 class="title">Mikroservis Mimarisine Giriş ve Temel İlkeler</h1>
+            <p class="subtitle">
+                E-Ticaret senaryosu üzerinden Monolitik ve Mikroservis mimarilerinin visual (görsel), interaktif ve teknik karşılaştırma ders notları.
+            </p>
+
+            <div class="header-stats">
+                <div class="stat-box">
+                    <span class="stat-value">1:1</span>
+                    <span class="stat-label">Mimari Kıyaslama</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value">Interactive</span>
+                    <span class="stat-label">Canlı Simülatörler</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value">Senior Level</span>
+                    <span class="stat-label">Teknik Anlatım</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <button class="nav-btn active" onclick="switchSection('section-intro')">📌 1. Tanım ve Mantık</button>
+            <button class="nav-btn" onclick="switchSection('section-monolith')">🏛️ 2. Monolitik Mimari</button>
+            <button class="nav-btn" onclick="switchSection('section-microservices')">🧩 3. Mikroservis & Ölçekleme</button>
+            <button class="nav-btn" onclick="switchSection('section-resource')">⚡ 4. Kaynak & Hata İzolasyonu</button>
+            <button class="nav-btn" onclick="switchSection('section-tradeoffs')">⚠️ 5. Maliyetler & API Gateway</button>
+            <button class="nav-btn" onclick="switchSection('section-quiz')">🎯 6. İnteraktif Quiz</button>
+        </nav>
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section id="section-intro" class="section-block active">
+            <div class="card card-hero">
+                <div class="card-icon">🚀</div>
+                <div>
+                    <h2>Mikroservis Mimarisi Nedir?</h2>
+                    <p class="lead-text">
+                        Mikroservis mimarisi, en basit tabirle <strong>bir uygulamanın küçük ve bağımsız parçalara (servislere) bölündüğü</strong> mimari bir yaklaşımdır.
+                    </p>
+                    <p>
+                        Her servis kendi iş mantığına (Business Domain) odaklanır, kendi verilerini yönetebilir ve diğer servislerden tamamen bağımsız bir şekilde <em>deploy</em> (dağıtık olarak yayınlama) ve <em>scale</em> (ölçekleme) edilebilir.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card feature-box">
+                    <h3>🏛️ Monolitik Yaklaşım</h3>
+                    <p>Tüm servisler (Product, Checkout, Payment, Recommendation) <strong>tek bir uygulama paketinin (Single Deployable Unit)</strong> içindedir.</p>
+                    <div class="code-badge">Single Codebase • Single Deployment Unit</div>
+                </div>
+
+                <div class="card feature-box highlight-cyan">
+                    <h3>🧩 Mikroservis Yaklaşımı</h3>
+                    <p>Her bir servis (Product, Search, Payment) <strong>ayrı bir uygulama</strong> olarak ayaktadır ve birbiriyle ağ üzerinden haberleşir.</p>
+                    <div class="code-badge badge-cyan">Decoupled Services • Independent Scaling</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MONOLITHIC ARCHITECTURE -->
+        <section id="section-monolith" class="section-block">
+            <div class="card">
+                <h2>🏛️ Monolitik Mimari ve Dezavantajları</h2>
+                <p>Bir E-Ticaret sistemi hayal edelim. Sistem içerisinde <strong>Product Service</strong>, <strong>Checkout Service</strong> ve <strong>Payment Service</strong> gibi tüm modüller aynı projenin içinde derlenir.</p>
+                
+                <div class="architecture-diagram monolith-diagram">
+                    <div class="diagram-header">
+                        <span class="diagram-tag">MONOLITHIC APPLICATION (Single Deployable Unit)</span>
+                    </div>
+                    <div class="monolith-body">
+                        <div class="module-box">📦 Product Service</div>
+                        <div class="module-box">🛒 Checkout Service</div>
+                        <div class="module-box">💳 Payment Service</div>
+                        <div class="module-box">⭐ Recommendation Service</div>
+                    </div>
+                    <div class="diagram-footer">
+                        <span>Tek Bir Veritabanı / Tek Bir Sunucu</span>
+                    </div>
+                </div>
+
+                <div class="problem-list">
+                    <h3>❌ Monolitik Mimarinin 2 Temel Kök Problemi:</h3>
+
+                    <div class="problem-card">
+                        <div class="problem-num">1</div>
+                        <div>
+                            <h4>Büyük Codebase ve Bakım Zorluğu (Maintenance Costs)</h4>
+                            <p>Tüm servisler tek bir uygulama içerisindedir. Kod tabanı (Codebase) aşırı büyüdüğü için projeyi geliştirmek (Maintain etmek), oluşan hataları düzeltmek (Bug Fix yapmak) ve yeni özellikler çıkmak çok zordur.</p>
+                        </div>
+                    </div>
+
+                    <div class="problem-card">
+                        <div class="problem-num">2</div>
+                        <div>
+                            <h4>Deployment ve İsraflı Ölçekleme (Single Deployable Unit Problem)</h4>
+                            <p>
+                                E-ticaret sitesine gelen istekler (Request Per Second - RPS) eşit değildir. Kullanıcılar en çok <strong>Product (Ürün)</strong> sayfasına istek atar.
+                            </p>
+                            <p>
+                                Product servisine gelen yük arttığında sistem zorlanır. Ancak monolitik yapıda <u>sadece Product servisini ölçekleyemezsiniz</u>! İhtiyaç olsun olmasın <strong>tüm koca uygulamayı (tüm modülleriyle birlikte)</strong> defalarca çoğaltıp deploy etmek zorunda kalırsınız.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Monolith Scaling Simulator -->
+                <div class="simulator-card">
+                    <h3>🎮 Canlı Simülatör: Monolitik Ölçekleme İsrafı</h3>
+                    <p>Ürün sayfasına gelen trafiği artırın ve sunucudaki kaynak israfını görün:</p>
+                    
+                    <div class="sim-controls">
+                        <button class="sim-btn btn-danger" onclick="simulateMonolithTraffic()">🔥 Product Sayfasına Yoğun Trafik Gönder (+1000 Req/s)</button>
+                        <button class="sim-btn btn-secondary" onclick="resetMonolithSim()">🔄 Sıfırla</button>
+                    </div>
+
+                    <div id="monolith-instances-container" class="instances-grid">
+                        <div class="instance-card">
+                            <div class="instance-title">Instance #1 (Ana Sunucu)</div>
+                            <div class="instance-modules">Product + Checkout + Payment + Recommendation</div>
+                            <div class="resource-bar-wrapper">
+                                <span class="res-label">CPU / RAM Yükü:</span>
+                                <div class="resource-bar"><div class="res-fill" style="width: 40%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="monolith-sim-log" class="sim-log">Durum: Normal Trafik. 1 Adet Monolith Instance aktif.</div>
+
+                    <!-- Next.js & Instance Concept Explanation Box -->
+                    <div class="concept-explanation-box">
+                        <div class="concept-title">💡 Somut Örnek & Mantık: Next.js ve "Instance" Ne Demek?</div>
+                        
+                        <div class="concept-item">
+                            <h4>1. "Tek bir yerde" derken benim Next.js projem gibi mi?</h4>
+                            <p>
+                                <strong>EVET, TAM OLARAK NEXT.JS PROJENİZ GİBİ!</strong> Yukarıdaki <code>Instance #1 (Ana Sunucu)</code> kutusundaki <em>Product</em>, <em>Checkout</em>, <em>Payment</em> ve <em>Recommendation</em> servisleri; tıpkı sizin Next.js projenizdeki <code>app/products</code>, <code>app/checkout</code>, <code>app/payment</code> klasörleridir. Hepsi tek bir proje klasöründe, tek bir <code>npm run build</code> çıktısı olarak yayınlanır.
+                            </p>
+                        </div>
+
+                        <div class="concept-item">
+                            <h4>2. "Instance" (Kopya / Örnek Sunucu) ne demektir?</h4>
+                            <p>
+                                <strong>Instance:</strong> Canlıda (sunucuda) ayağa kaldırılmış 1 adet çalışan uygulama kopyasıdır (sunucu süreci / process).
+                            </p>
+                            <div class="analogy-pill">
+                                💻 <strong>Günlük Hayat Örneği:</strong> Bilgisayarınızda Chrome tarayıcısını 1 kere açtığınızda ➔ <strong>1 Instance Chrome</strong> çalışır. Chrome simgesine 4 kere daha tıklayıp 4 ayrı pencere açarsanız ➔ <strong>5 Instance Chrome</strong> olur ve bilgisayarınızın RAM'ini 5 kat daha fazla tüketir!
+                            </div>
+                        </div>
+
+                        <div class="concept-item">
+                            <h4>3. Simülatördeki "Monolitik Ölçekleme İsrafı" Tam Olarak Nedir?</h4>
+                            <p>
+                                Diyelim ki e-ticaret sitenize Black Friday (Efsane Cuma) günü <strong>100.000 kişi aynı anda girdi</strong> ve bu kişilerin hepsi sadece <strong>Ürünleri (Product)</strong> geziyor. Kimse henüz ödeme yapmıyor.
+                            </p>
+                            <ul class="styled-list">
+                                <li><strong>Problem:</strong> Sadece Ürün sayfası kilitlendi, sunucunuz kasıyor.</li>
+                                <li><strong>Monolitik (Next.js) Çözümü:</strong> Sunucuyu rahatlatmak için uygulamanızın kopyalarını (Instance) çoğaltmanız gerekir.</li>
+                                <li><strong>BURADAKİ İSRAF:</strong> Monolitik yapıda <em>"Ben sadece Ürün kodlarını kopyalayayım"</em> diyemezsiniz! Çare olarak, içinde hiç kullanılmayan Ödeme ve Sepet kodlarının da olduğu <strong>koca Next.js projesini sunucuda 5 defa baştan sona kopyalayıp (5 Instance)</strong> çalıştırmak zorunda kalırsınız.</li>
+                            </ul>
+                            <div class="summary-highlight">
+                                🚨 <strong>Sonuç:</strong> Hiç kimsenin ödeme yapmadığı bir anda, 5 sunucu kopyasında da Ödeme ve Sepet kodları boşu boşuna sunucunun RAM ve CPU kaynağını tüketir. İşte buna <strong>"Monolitik Ölçekleme İsrafı"</strong> denir.
+                            </div>
+                        </div>
+
+                        <div class="concept-item">
+                            <h4>4. "Gerçekten monolitik yapıda scale edilebilir mi? Yoksa bu sadece bir örnek mi?"</h4>
+                            <p>
+                                <strong>EVET, GERÇEKTEN DE CANLI SİSTEMLERDE MONOLİTİK UYGULAMALAR BU ŞEKİLDE SCALE EDİLİR (Yatay Ölçekleme / Horizontal Scaling)! BU SADECE ÖRNEK DEĞİL, GERÇEK DÜNYADAKİ YÖNTEMDİR.</strong>
+                            </p>
+
+                            <div class="sub-concept-box">
+                                <h5>🛠️ Gerçek Hayatta Şirketler Monoliti Nasıl Scale Eder?</h5>
+                                <p>
+                                    Diyelim ki sizin Next.js ile yazdığınız monolitik e-ticaret siteniz var. Trendyol veya Hepsiburada gibi büyük bir indirim gününde binlerce kişi sitenize girdi ve 1 adet sunucunuz kilitlenmeye başladı.
+                                </p>
+                                <p>
+                                    Şirketler bunu çözmek için sunucularının önüne bir <strong>Load Balancer (Yük Dengeleyici - örn. NGINX veya AWS Load Balancer)</strong> koyarlar. Ardından aynı Next.js uygulamanızı 4 farklı sunucuya (veya Docker konteynerine) kopyalayıp yayınlarlar:
+                                </p>
+                                <div class="server-stack">
+                                    <div class="server-node">Sunucu 1: Next.js Uygulaması (İçinde Product + Checkout + Payment var)</div>
+                                    <div class="server-node">Sunucu 2: Next.js Uygulaması (İçinde Product + Checkout + Payment var)</div>
+                                    <div class="server-node">Sunucu 3: Next.js Uygulaması (İçinde Product + Checkout + Payment var)</div>
+                                    <div class="server-node">Sunucu 4: Next.js Uygulaması (İçinde Product + Checkout + Payment var)</div>
+                                </div>
+                                <p>Gelen 100.000 isteği Load Balancer bu 4 sunucu kopyasına dağıtır. Böylece siteniz çökmez ve scale edilmiş olur.</p>
+                            </div>
+
+                            <div class="sub-concept-box border-red-box">
+                                <h5>🚨 Korkunç İsraf Nerededir?</h5>
+                                <p>
+                                    Gelen 100.000 kişinin <strong>99.000 tanesi sadece ürünlerin fotoğraflarına bakıyordur (Product Service)</strong>. Kimse henüz sepetine ürün eklememiş, ödeme yapmamıştır.
+                                </p>
+                                <p>
+                                    Siz sadece Ürünlerin olduğu sayfayı rahatlatmak istiyordunuz. Ama monolitik yapıda kodlar tek parça olduğu için içinde hiç kullanılmayan Ödeme ve Sepet kodlarının da olduğu 4 koca Next.js uygulamasını sunucularda çalıştırmak zorunda kaldınız. Ödeme kütüphaneleri, sepet sorguları o 4 sunucunun da RAM'inde ve CPU'sunda boşu boşuna yer kaplar. Şirketler bu israf yüzünden AWS / Vercel gibi bulut sağlayıcılarına her ay yüz binlerce dolar fazla faturası öderler!
+                                </p>
+                            </div>
+
+                            <div class="sub-concept-box border-green-box">
+                                <h5>🧩 Mikroservisin Çözümü Nedir?</h5>
+                                <p>
+                                    Mikroservis mimarisinde:
+                                </p>
+                                <ul class="styled-list">
+                                    <li><strong>Product Service (Ürün Servisi):</strong> 4 Adet Sunucuya scale edilir.</li>
+                                    <li><strong>Payment Service (Ödeme Servisi):</strong> 1 Adet Sunucuda kalır (Çünkü kimse ödeme yapmıyor).</li>
+                                </ul>
+                                <p>Böylece sıfır israf ile tam ihtiyaca göre kaynak harcanmış olur!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: MICROSERVICES & SCALING -->
+        <section id="section-microservices" class="section-block">
+            <div class="card highlight-cyan">
+                <h2>🧩 Mikroservis Mimarisi ve Bağımsız Ölçekleme</h2>
+                <p>
+                    Mikroservis mimarisinde her bir servis <strong>decoupled (bağımsız)</strong> durumdadır. Her servis ayrı bir uygulama olarak çalışır, kendi veritabanını ve kaynaklarını yönetir.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Tek Sorumluluk İlkesi (Single Responsibility Principle)</h3>
+                <p>
+                    Mikroservislerin en kritik kuralı: <strong>Her bir servis sadece kendi iş mantığından sorumludur!</strong>
+                </p>
+                <div class="grid grid-3">
+                    <div class="sr-card">
+                        <div class="sr-icon">📦</div>
+                        <h4>Product Service</h4>
+                        <p>Sadece ürün kataloğu, ürün detayları ve stok bilgilerini yönetir.</p>
+                    </div>
+                    <div class="sr-card">
+                        <div class="sr-icon">🔍</div>
+                        <h4>Search Service</h4>
+                        <p>Sadece arama ve filtreleme algoritmalarına özelleşmiştir.</p>
+                    </div>
+                    <div class="sr-card">
+                        <div class="sr-icon">💳</div>
+                        <h4>Payment Service</h4>
+                        <p>Sadece ödeme alma, pos entegrasyonu ve faturalandırmayı yürütür.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Microservice Scaling Simulator -->
+            <div class="card simulator-card">
+                <h3>🎮 Canlı Simülatör: İnce Ayarlı (Fine-Grained) Mikroservis Ölçekleme</h3>
+                <p>Farklı servislere bağımsız trafik göndererek sadece ihtiyacı olan servisin çoğaldığını gözlemleyin:</p>
+
+                <div class="micro-sim-grid">
+                    <div class="micro-service-control">
+                        <h4>📦 Product Service</h4>
+                        <p class="desc">Kullanıcıların en çok gezindiği sayfa</p>
+                        <div class="sim-actions">
+                            <button class="btn-micro" onclick="scaleMicroService('product', 1)">+1 Instance Ekle</button>
+                            <button class="btn-micro btn-outline" onclick="scaleMicroService('product', -1)">-1 Eksilt</button>
+                        </div>
+                        <div class="instance-badge" id="product-count">3 Instance Aktif</div>
+                    </div>
+
+                    <div class="micro-service-control">
+                        <h4>🔍 Search Service</h4>
+                        <p class="desc">Arama motoru sorguları</p>
+                        <div class="sim-actions">
+                            <button class="btn-micro" onclick="scaleMicroService('search', 1)">+1 Instance Ekle</button>
+                            <button class="btn-micro btn-outline" onclick="scaleMicroService('search', -1)">-1 Eksilt</button>
+                        </div>
+                        <div class="instance-badge" id="search-count">2 Instance Aktif</div>
+                    </div>
+
+                    <div class="micro-service-control">
+                        <h4>💳 Payment Service</h4>
+                        <p class="desc">Sadece satın alma anında tetiklenir</p>
+                        <div class="sim-actions">
+                            <button class="btn-micro" onclick="scaleMicroService('payment', 1)">+1 Instance Ekle</button>
+                            <button class="btn-micro btn-outline" onclick="scaleMicroService('payment', -1)">-1 Eksilt</button>
+                        </div>
+                        <div class="instance-badge" id="payment-count">1 Instance Aktif</div>
+                    </div>
+                </div>
+
+                <div class="visual-cluster">
+                    <h4>🌐 Canlı Sunucu Kümesi (Cluster Canvas)</h4>
+                    <div id="cluster-canvas" class="cluster-canvas">
+                        <!-- Dynamic Nodes Will Render Here -->
+                    </div>
+                </div>
+
+                <!-- Explanation Box for Microservice Simulator Buttons -->
+                <div class="concept-explanation-box">
+                    <div class="concept-title">💡 Bu Simülatördeki "+1 Instance Ekle / -1 Eksilt" Butonları Neyi Anlatıyor?</div>
+                    
+                    <div class="concept-item">
+                        <h4>1. İnce Ayarlı (Fine-Grained) Bağımsız Ölçekleme</h4>
+                        <p>
+                            Monolitik yapıda hatırlarsanız <em>Product</em> servisine yük geldiğinde, istemesek de kullanılmayan <em>Payment</em> ve <em>Search</em> servisleriyle birlikte koca projeyi kopyalıyorduk. Mikroserviste ise her servis ayrı bir proje olduğu için <strong>sadece ihtiyacı olan servisin (örn: Product) instance kopyasını artırabiliriz</strong>.
+                        </p>
+                    </div>
+
+                    <div class="concept-item">
+                        <h4>2. Canlı Sunucu Kümesi (Cluster Canvas) Kutucukları Nedir?</h4>
+                        <p>
+                            Butonlara tıkladığınızda aşağıdaki siyah kutuda beliren yeşil/mor/mavi düğümler (Node'lar); gerçek dünyada <strong>Docker Konteynerlerini (Containers) veya Kubernetes Pod'larını</strong> temsil eder. Her yeni düğüm, o servisin canlıda çalışan bağımsız yeni bir sunucu kopyasıdır.
+                        </p>
+                    </div>
+
+                    <div class="concept-item">
+                        <h4>3. Gerçek Hayattaki Ekonomik & Performans Kazancı</h4>
+                        <div class="analogy-pill">
+                            ⚡ <strong>Örnek Senaryo:</strong> Gündüz 100.000 kullanıcı ürünleri gezerken <code>+1 Instance</code> diyerek sadece Product Servisini 5 kopyaya çıkarır, sistemi rahatlatırsınız. Gece trafik düşünce <code>-1 Eksilt</code> diyerek kopyaları kapatır ve AWS / Vercel bulut faturanızı anında düşürürsünüz!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: RESOURCE ALLOCATION & FAULT ISOLATION -->
+        <section id="section-resource" class="section-block">
+            <div class="card">
+                <h2>⚡ 1. Servis İhtiyacına Göre Kaynak Tahsisi (Resource Allocation)</h2>
+                <p>
+                    Monolitik yapıda tüm modüller tek bir sunucuyu paylaştığı için servislerin özel kaynak ihtiyaçları karşılanamazdı. Mikroservislerde her servise ihtiyacına göre donanım verilebilir:
+                </p>
+
+                <div class="grid grid-3">
+                    <div class="resource-card cpu-bound">
+                        <div class="res-tag">CPU-Bound</div>
+                        <h3>💻 İşlemci Yoğunluklu</h3>
+                        <p>Arama veya görüntü işleme gibi ağır matematiksel hesaplama yapan servisler daha yüksek <strong>CPU (İşlemci)</strong> çekirdeği ister.</p>
+                    </div>
+
+                    <div class="resource-card mem-bound">
+                        <div class="res-tag">Memory-Bound</div>
+                        <h3>🧠 Bellek Yoğunluklu</h3>
+                        <p>Önbellekleme (Caching) yapan, ürün kataloğunu RAM'de tutan servisler daha fazla <strong>RAM / Bellek</strong> ister.</p>
+                    </div>
+
+                    <div class="resource-card io-bound">
+                        <div class="res-tag">I/O-Bound</div>
+                        <h3>Giriş/Çıkış Yoğunluklu</h3>
+                        <p>Veritabanı veya harici API'lerle sürekli veri alışverişi yapan servisler yüksek <strong>Network / Disk I/O</strong> bant genişliği ister.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fault Isolation Section -->
+            <div class="card">
+                <h2>🛡️ 2. Hata İzolasyonu (Fault Isolation) ve Polyglot Özgürlüğü</h2>
+                <p>
+                    Mikroservislerin en büyük avantajlarından biri de bir servisteki çökmenin (Down olmasının) diğer servisleri etkilememesidir.
+                </p>
+
+                <div class="scenario-box">
+                    <h4>🧪 E-Ticaret Sayfası Canlı Hata Senaryosu:</h4>
+                    <p>
+                        Bir e-ticaret sitesinde ürün detayına girdiğinizi düşünün. Sayfada ürün bilgisi ve altında <em>"Size Özel Tavsiyeler"</em> bölümü var.
+                    </p>
+                    <div class="interactive-fault-demo">
+                        <div class="ecom-mockup">
+                            <div class="ecom-header">🛒 E-Ticaret Mağazası</div>
+                            <div class="ecom-product">
+                                <strong>iPhone 15 Pro Max</strong> - ₺75.000 (Product Service: ✅ Aktif)
+                            </div>
+                            <div id="ecom-recommendation" class="ecom-recom recom-active">
+                                ⭐ Tavsiye Edilen Ürünler: AirPods Pro, Deri Kılıf (Recommendation Service: ✅ Aktif)
+                            </div>
+                        </div>
+
+                        <div class="fault-controls">
+                            <button class="btn-danger" onclick="toggleFault('recommendation')">💥 Recommendation Service'i DÜŞÜR (DOWN Et)</button>
+                            <button class="btn-success" onclick="toggleFault('reset')">✅ Servisi Tekrar Başlat</button>
+                        </div>
+                    <p id="fault-explanation" class="explanation-text">
+                        Servis çalıştığı sürece sayfanın tüm bileşenleri kusursuz görüntülenir.
+                    </p>
+
+                    <!-- Fault Isolation Detailed Concept Box -->
+                    <div class="concept-explanation-box">
+                        <div class="concept-title">💡 Soru & Cevap: Web Sitesi Bozulmamış mı Oluyor? Web Sayfası Crash Oluyor mu?</div>
+                        
+                        <div class="concept-item">
+                            <h4>EVET, KESİNLİKLE DOĞRU! %100 ANLADINIZ!</h4>
+                            <p>
+                                Web siteniz <strong>ASLA CRASH OLMAZ (ÇÖKMEZ)</strong>! Sadece ilgili <em>Recommendation (Tavsiye)</em> servisi Down olur.
+                            </p>
+                        </div>
+
+                        <div class="concept-item">
+                            <div class="sub-concept-box border-red-box">
+                                <h5>🏛️ Monolitik Yapıda Ne Olurdu? (Çöküş)</h5>
+                                <p>
+                                    Monolitik bir uygulamada (örneğin Next.js içinde) Tavsiye kodu bir hata verip çöktüğünde veya belleği tükettiğinde, <strong>TÜM WEB SİTESİ KİLİTLENİR VE ÇÖKERDİ (500 Internal Server Error)</strong>. Müşteri ürünü de göremezdi, satın da alamazdı.
+                                </p>
+                            </div>
+
+                            <div class="sub-concept-box border-green-box">
+                                <h5>🧩 Mikroservis Yapısında Ne Olur? (Fault Isolation)</h5>
+                                <p>
+                                    Mikroserviste Tavsiye servisi Down olsa bile:
+                                </p>
+                                <ul class="styled-list">
+                                    <li>Müşteri <strong>iPhone 15 Pro Max ürününü görür.</strong></li>
+                                    <li>Müşteri ürünü sepete ekleyip <strong>satın alma işlemini (Payment) %100 gerçekleştirir.</strong></li>
+                                    <li>Sadece alt kısımdaki <em>"Size Özel Tavsiyeler"</em> alanı geçici olarak boş görünür veya gizlenir.</li>
+                                </ul>
+                                <p><strong>Sonuç:</strong> Şirket satış yapmaya ve para kazanmaya devam eder, müşteri kaybı yaşanmaz!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="polyglot-card">
+                    <h3>🛠️ Teknoloji Çeşitliliği (Polyglot Tech Stack)</h3>
+                    <p>Her mikroservisin ihtiyacına uygun farklı veritabanı ve farklı programlama dilleri seçilebilir:</p>
+                    <div class="tech-pills">
+                        <span class="pill">Product Service ➔ Go + MongoDB</span>
+                        <span class="pill">Search Service ➔ Java + Elasticsearch</span>
+                        <span class="pill">Payment Service ➔ C# / .NET + PostgreSQL</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: TRADEOFFS & API GATEWAY -->
+        <section id="section-tradeoffs" class="section-block">
+            <div class="card highlight-gold">
+                <h2>⚠️ Mikroservislerin Maliyetleri ve Dezavantajları</h2>
+                <p>Mikroservisler mükemmel çözümler sunar ancak berberinde ciddi mühendislik zorlukları getirir.</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card border-red">
+                    <h3>1. Ağ Gecikmesi & Çağrı Maliyeti (Network Latency)</h3>
+                    <p>
+                        Monolitikte servis içi metod çağrıları <strong>In-Memory (Lokal)</strong> gerçekleştiği için maliyeti sıfıra yakındır.
+                    </p>
+                    <p>
+                        Mikroservislerde ise servisler arası haberleşme ağ üzerinden (<strong>HTTP / gRPC</strong>) yapılır. Bu çağrıların milisaniye (ms) cinsinden ek ağ gecikmesi (Network Latency) vardır.
+                    </p>
+                    <div class="call-comparison">
+                        <div class="call-box local">Lokal Çağrı (Monolith): ~0.001 ms</div>
+                        <div class="call-box network">Ağ Çağrısı (Microservice): ~15-50 ms</div>
+                    </div>
+                </div>
+
+                <div class="card border-blue">
+                    <h3>2. Servis Keşfi & Dayanıklılık (Resiliency)</h3>
+                    <p>Birden fazla instance çalışırken istek hangi instance'a gidecek? Ağ koparsa ne olacak?</p>
+                    <ul class="styled-list">
+                        <li><strong>Load Balancing:</strong> Gelen yükü aktif instance'lara dağıtma.</li>
+                        <li><strong>Service Discovery:</strong> Dinamik IP'leri takip eden keşif sunucusu.</li>
+                        <li><strong>Retry & Circuit Breaker:</strong> Hata durumunda yeniden deneme ve devre kesici mekanizmaları.</li>
+                        <li><strong>Fallback Response:</strong> Servis çöktüğünde yedek yanıt dönme.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- API Gateway Section -->
+            <div class="card border-purple">
+                <h2>🚪 API Gateway ve Proxy Mimarisi</h2>
+                <p>
+                    Dış dünyadaki istemciler (Web, Mobil) doğrudan iç ağdaki onlarca mikroservise erişmez!
+                </p>
+                <div class="gateway-diagram">
+                    <div class="client-node">📱 External Client (Mobil/Web)</div>
+                    <div class="arrow-down">⬇️ (İstekler tek bir noktaya gelir)</div>
+                    <div class="gateway-box">
+                        🛡️ <strong>API GATEWAY (Proxy / Security / Discovery)</strong>
+                        <small>Güvenlik, Kimlik Doğrulama, Rate Limiting, Yönlendirme</small>
+                    </div>
+                    <div class="arrow-down">⬇️ (İç Ağda Dağıtılır)</div>
+                    <div class="micro-nodes">
+                        <span class="micro-node">Product Service</span>
+                        <span class="micro-node">Search Service</span>
+                        <span class="micro-node">Payment Service</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: INTERACTIVE QUIZ & RESULT -->
+        <section id="section-quiz" class="section-block">
+            <div class="card quiz-wrapper">
+                <h2>🎯 Ders 1 Anlama Seviyesi Quizi (5 Soru)</h2>
+                <p>İşlenen tüm mimari kavramları sınayın ve sonucunuzu görün:</p>
+
+                <!-- Question 1 -->
+                <div class="quiz-item" data-question-id="1">
+                    <p class="quiz-q">1. Monolitik bir mimaride (Single Deployable Unit) sadece Ürün (Product) servisine yoğun yük geldiğinde ölçekleme nasıl gerçekleşir?</p>
+                    <div class="quiz-options">
+                        <button class="q-btn" onclick="selectQuizOption(this, 1, false)">A) Sadece Product servisi otomatik olarak tek başına kopyalanır.</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 1, true)">B) İçinde kullanılmayan Ödeme ve Sepet kodlarının da olduğu tüm monolitik uygulama paketi kopyalanır (Monolitik Ölçekleme İsrafı).</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 1, false)">C) Diğer servisler kapatılır.</button>
+                    </div>
+                    <div class="q-feedback"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-item" data-question-id="2">
+                    <p class="quiz-q">2. Mikroservis mimarisindeki "Fault Isolation" (Hata İzolasyonu) ilkesine göre Tavsiye Servisi (Recommendation) çöktüğünde ne olur?</p>
+                    <div class="quiz-options">
+                        <button class="q-btn" onclick="selectQuizOption(this, 2, false)">A) Tüm e-ticaret sitesi 500 hatası verip tamamen çöker (Crash).</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 2, true)">B) Web sitesi çökmez; müşteri ürün detayını görür, sepete ekler ve satın alabilir. Sadece tavsiye alanı boş kalır.</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 2, false)">C) Kullanıcının veritabanı silinir.</button>
+                    </div>
+                    <div class="q-feedback"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-item" data-question-id="3">
+                    <p class="quiz-q">3. Mikroservisler arasındaki haberleşme (Ağ Çağrıları - Network Call) ile Monolitik içi metod çağrıları (In-Memory Local Call) karşılaştırıldığında hangisi doğrudur?</p>
+                    <div class="quiz-options">
+                        <button class="q-btn" onclick="selectQuizOption(this, 3, false)">A) Monolitik içi çağrılar ağ üzerinden yapıldığı için gecikmesi yüksektir.</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 3, true)">B) Mikroservisler arası HTTP/gRPC çağrıları ağ gecikmesine (Network Latency - milisaniye maliyeti) sahiptir.</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 3, false)">C) İkisi arasında hiçbir hız farkı yoktur.</button>
+                    </div>
+                    <div class="q-feedback"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-item" data-question-id="4">
+                    <p class="quiz-q">4. Dış dünyadan (Mobil/Web istemcilerinden) gelen istekleri karşılayan, güvenliği sağlayan, rate limiting uygulayan ve mikroservislere yönlendiren katman hangisidir?</p>
+                    <div class="quiz-options">
+                        <button class="q-btn" onclick="selectQuizOption(this, 4, true)">A) API Gateway (Proxy)</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 4, false)">B) Single Deployable Unit</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 4, false)">C) Monorepo</button>
+                    </div>
+                    <div class="q-feedback"></div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-item" data-question-id="5">
+                    <p class="quiz-q">5. Farklı mikroservislerin ihtiyacına göre biri için Java/Elasticsearch, diğeri için Go/MongoDB veya C#/.NET seçebilme özgürlüğüne ne ad verilir?</p>
+                    <div class="quiz-options">
+                        <button class="q-btn" onclick="selectQuizOption(this, 5, true)">A) Polyglot Tech Stack (Teknoloji Çeşitliliği)</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 5, false)">B) Monorepo Strategy</button>
+                        <button class="q-btn" onclick="selectQuizOption(this, 5, false)">C) Single Responsibility Failure</button>
+                    </div>
+                    <div class="q-feedback"></div>
+                </div>
+
+                <!-- Quiz Result Card (Calculated automatically when all 5 questions are answered) -->
+                <div id="quiz-result-card" class="quiz-result-card" style="display:none;">
+                    <div class="result-header">📊 Ders 1 Quiz Sonucunuz</div>
+                    <div class="result-stats">
+                        <div class="res-stat-box stat-correct">
+                            <span id="res-correct-count">0</span>
+                            <small>Doğru</small>
+                        </div>
+                        <div class="res-stat-box stat-incorrect">
+                            <span id="res-incorrect-count">0</span>
+                            <small>Yanlış</small>
+                        </div>
+                        <div class="res-stat-box stat-score">
+                            <span id="res-score-percent">%0</span>
+                            <small>Başarı Oranı</small>
+                        </div>
+                    </div>
+                    <div id="res-feedback-msg" class="res-feedback-msg"></div>
+                    <button class="sim-btn btn-secondary" onclick="resetQuiz()" style="margin-top: 18px;">🔄 Quizi Yeniden Çöz</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Mikroservis Eğitimi • Ders 1 Notları ve İnteraktif Mimari Simülatörü</p>
+            <p class="sub-footer">Ders Notu Klasörü: Tutorials/1_DilrubaKose/1_Ders/</p>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>
