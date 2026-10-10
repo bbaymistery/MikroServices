@@ -1,0 +1,70 @@
+book.dto.ts BU >>apps\bookstore-api-gateway\src\books\dto\ BURAYA TASINDI 
+apps\bookstore-api-gateway\src\books\books.module.ts  >> >
+
+ import { Module } from '@nestjs/common';
+import { BooksService } from './books.service';
+import { BooksController } from './books.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+
+@Module({
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'BOOKS_CLIENT',
+        transport: Transport.TCP,
+        options: { port: 3002 },
+      },
+    ]),
+  ],
+  controllers: [BooksController],
+  providers: [BooksService],
+  exports: [BooksService],
+})
+export class BooksModule { }
+ 
+seklinde duzeltildi 
+__
+
+sonra bu kisim update olundu ve test icin 
+ npx nest start books --watch yazildi 
+
+
+_______
+
+api icinde books.http olusduruldu icine 
+
+#findAll
+GET http://localhost:3002/books/books
+
+#findOne
+GET http://localhost:3002/books/books/1
+
+#create
+POST http://localhost:3002/books/books
+Content-Type: application/json
+
+{
+    "title": "Test book post ",
+    "author": "Test author ",
+    "rating": 3
+}
+
+#update
+PUT http://localhost:3002/books/books/1
+Content-Type: application/json
+
+{
+    "title": "Book 1 Updated",
+    "author": "Author 1 Updated",
+       "rating": 3
+
+}
+
+#delete
+DELETE http://localhost:3002/books/books/1
+
+
+yazildi 
+
+bunlari readmeye eklermisin 
+ve hepsini push edermisin 
